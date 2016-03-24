@@ -33,6 +33,9 @@ class ContentElement(Element):
         
 
 class BaseResource(Resource):
+    isLeaf = True
+    addSlash = True
+
     def __init__(self, service):
         self.service = service
 
