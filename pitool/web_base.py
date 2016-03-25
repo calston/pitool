@@ -1,3 +1,6 @@
+import json
+
+from twisted.internet import defer
 from twisted.web import server
 from twisted.web.resource import Resource
 from twisted.web.template import Element, renderer, XMLFile, tags, flattenString, TagLoader
@@ -33,10 +36,8 @@ class ContentElement(Element):
         
 
 class BaseResource(Resource):
-    isLeaf = True
-    addSlash = True
-
     def __init__(self, service):
+        Resource.__init__(self)
         self.service = service
 
     def completeCall(self, response, request):
@@ -46,6 +47,26 @@ class BaseResource(Resource):
     def render_GET(self, request):
         flattenString(None, BaseElement(self.service, self.Content)
             ).addCallback(self.completeCall, request)
+
+        return server.NOT_DONE_YET
+
+class JSONResource(Resource):
+    def __init__(self, service):
+        Resource.__init__(self)
+        self.service = service
+
+    def completeCall(self, response, request):
+        request.write(json.dumps(response))
+        request.finish()
+
+    def get(self, request):
+        return ""
+
+    def render_GET(self, request):
+        request.setHeader("content-type", "application/json")
+
+        d = defer.maybeDeferred(self.get, request)
+        d.addCallback(self.completeCall, request)
 
         return server.NOT_DONE_YET
 
