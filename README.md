@@ -14,7 +14,9 @@ $ . ./ve/bin/activate
 (ve)$ twistd -n pitool
 ```
 
-This will be made better eventually.
+This will be made better eventually. When done head to http://raspberrypi:8081
+(you might need to go directly to the IP if your Pi if your network has no 
+DHCP hostname resolution)
 
 ## Pics or it didn't happen
 
