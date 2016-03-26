@@ -2,7 +2,7 @@
 
 PiTool is a web interface for doing GPIO diagnostics stuff on the Raspberry Pi.
 
-# Installation
+## Installation
 
 ```
 $ git clone https://github.com/calston/pitool.git
@@ -16,10 +16,10 @@ $ . ./ve/bin/activate
 
 This will be made better eventually.
 
-# Pics or it didn't happen
+## Pics or it didn't happen
 
-## Dashboard
+### Dashboard
 ![screen2](https://i.imgur.com/sMpmqob.png)
 
-## Analyzer
+### Analyzer
 ![screen1](https://i.imgur.com/i4LVGks.png)
