@@ -36,6 +36,8 @@ class ContentElement(Element):
         
 
 class BaseResource(Resource):
+    addSlash = True
+
     def __init__(self, service):
         Resource.__init__(self)
         self.service = service
@@ -49,6 +51,7 @@ class BaseResource(Resource):
             ).addCallback(self.completeCall, request)
 
         return server.NOT_DONE_YET
+
 
 class JSONResource(Resource):
     def __init__(self, service):

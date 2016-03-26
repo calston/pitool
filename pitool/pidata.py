@@ -44,6 +44,7 @@ MODES = {
 class Pin(object):
     pass
 
+
 class Voltage(Pin):
     def __init__(self, voltage):
         self.voltage = voltage
@@ -54,6 +55,7 @@ class Voltage(Pin):
             return "<Voltage Ground>"
         else:
             return "<Voltage +%sV>" % self.voltage
+
 
 class GPIO(Pin):
     """ Pin object representing a GPIO channel
@@ -85,35 +87,38 @@ class GPIO(Pin):
     def _buffer_write(self, value, t):
         if len(self.buffer) >= self.max_buffer:
             self.buffer.pop(0)
-        
         self.buffer.append((t, value))
 
-    def _edge_fall(self, chan):
-        self.state = 0
-        self._buffer_write(0, time.time())
+    def _now(self):
+        # Return time to micro-second resolution
+        return time.time()*1000000
 
-    def _edge_rise(self, chan):
-        self.state = 1
-        self._buffer_write(1, time.time())
+    def _edge(self, chan):
+        bit = gpio.input(self.bcm_id)
+        now = self._now()
+        self._buffer_write(bit, now)
+        self.state = bit
 
-    def listen(self, callback):
+    def listen(self):
         """Start listening to events on this pin. Updates `self.buffer`"""
+        if self.listening:
+            return
+
         if self.mode == gpio.IN:
             # Remove any existing detection
             gpio.remove_event_detect(self.bcm_id)
 
             # Use separate callbacks for rising and falling edges
-            gpio.add_event_detect(self.bcm_id, gpio.RISING,
-                callback=self._edge_rise)
-            gpio.add_event_detect(self.bcm_id, gpio.FALLING,
-                callback=self._edge_fall)
+            gpio.add_event_detect(self.bcm_id, gpio.BOTH,
+                callback=self._edge)
 
             self.listening = True
 
     def stopListening(self):
         """Stop listeners"""
-        gpio.remove_event_detect(self.bcm_id)
-        self.listening = False
+        if self.listening:
+            gpio.remove_event_detect(self.bcm_id)
+            self.listening = False
 
     def setPin(self, pin):
         # Set the pin location
@@ -130,19 +135,24 @@ class GPIO(Pin):
 
     def setOutput(self):
         """Set channel to output mode"""
+        self.stopListening()
+
         gpio.setup(self.bcm_id, gpio.OUT)
         self.mode = gpio.OUT
 
     def set(self, state):
         """If in output mode, set the pin high (1) or low (0)"""
         if self.mode == gpio.OUT:
+            # Write an event to the buffer. 
+            self._buffer_write(state, time.time()*1000)
+
             gpio.output(self.bcm_id, state)
             self.state = state
 
     def get(self):
         """If in input mode, get the current value"""
         if self.mode == gpio.IN:
-            self.state = gpio.input()
+            self.state = gpio.input(self.bcm_id)
 
         return self.state
 

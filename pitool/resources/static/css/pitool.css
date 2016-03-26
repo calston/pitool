@@ -84,7 +84,13 @@ body {
 }
 
 .gpio {
+  padding-top: 5px;
+  padding-bottom: 5px;
   border-top: 1px solid #cccccc;
+}
+
+.gpio-cell {
+  padding-top: 5px;
 }
 
 .bootstrap-switch-wrapper {

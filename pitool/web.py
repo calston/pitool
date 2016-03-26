@@ -66,7 +66,18 @@ class API(JSONResource):
         return {'Err': 'No command'}
 
 
+class Analyzer(BaseResource):
+    isLeaf = True
+
+    class Content(ContentElement):
+        loader = XMLFile(FilePath('pitool/resources/analyzer.html'))
+
+        #@renderer
+        #def (self, request, tag):
+
+
 class Index(BaseResource):
+    isLeaf = True
 
     class Content(ContentElement):
         loader = XMLFile(FilePath('pitool/resources/index.html'))
