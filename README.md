@@ -18,7 +18,8 @@ This will be made better eventually.
 
 # Pics or it didn't happen
 
-![screen1](https://i.imgur.com/i4LVGks.png)
-
+## Dashboard
 ![screen2](https://i.imgur.com/sMpmqob.png)
 
+## Analyzer
+![screen1](https://i.imgur.com/i4LVGks.png)
