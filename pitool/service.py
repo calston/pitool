@@ -32,6 +32,7 @@ class DataProtocol(WebSocketServerProtocol):
         self.streaming = False
         self.inputs = []
         self.start_time = time.time()*1000000
+        self.t = None
 
     def onMessage(self, payload, binary):
         if not binary:
@@ -84,7 +85,7 @@ class DataProtocol(WebSocketServerProtocol):
 
         remainder = len(wlist) - chunks
         if remainder < 0:
-            wlist = [0]*remainder + wlist
+            wlist.extend([0]*remainder)
         
         return reversed(wlist)
 
@@ -119,7 +120,9 @@ class DataProtocol(WebSocketServerProtocol):
         self.t.start(0.05)
 
     def onClose(self, wasClean, code, reason):
-        pass
+        if self.t:
+            self.t.stop()
+            log.msg("Stopping buffer send")
 
 class WSFactory(WebSocketServerFactory):
     def __init__(self, url, board):
