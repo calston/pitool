@@ -1,12 +1,104 @@
 <div xmlns:t="http://twistedmatrix.com/ns/twisted.web.template/0.1">
 
+  <script type="text/javascript" src="/static/js/analyzer.js"></script>
+
   <div class="panel panel-default">
     <div class="panel-heading">I/O Analyzer</div>
-    <div class="panel-body" id="gpiolist">
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <strong>View</strong>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2 text-right vcenter">Resolution</div>
+        <div class="col-lg-1 col-md-1 col-sm-2 col-xs-2">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" id="timebase" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">100ms
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" onclick="return setTimebase(10)">10&#181;s</a></li>
+              <li><a href="#" onclick="return setTimebase(100)">100&#181;s</a></li>
+              <li><a href="#" onclick="return setTimebase(1000)">1ms</a></li>
+              <li><a href="#" onclick="return setTimebase(10000)">10ms</a></li>
+              <li><a href="#" onclick="return setTimebase(100000)">100ms</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-right vcenter">Window</div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" id="window" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">5s
+              <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a href="#" onclick="return setWindow(100)">100&#181;s</a></li>
+              <li><a href="#" onclick="return setWindow(10000)">10ms</a></li>
+              <li><a href="#" onclick="return setWindow(100000)">100ms</a></li>
+              <li><a href="#" onclick="return setWindow(1000000)">1s</a></li>
+              <li><a href="#" onclick="return setWindow(2000000)">2s</a></li>
+              <li><a href="#" onclick="return setWindow(5000000)">5s</a></li>
+              <li><a href="#" onclick="return setWindow(10000000)">10s</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-7 col-md-7 col-sm-5 col-xs-5 text-right vcenter" id="chanlist">Channels: </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" id="window" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <span class="glyphicon glyphicon-cog"></span> <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="chandropdown">
+            </ul>
+          </div>
+        </div>
+      </div>
+      <br/>
+
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+          <strong>Trigger</strong>
+        </div>
+      </div>
+
+      <div class="row" id="realtime">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-right vcenter">Mode: </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Real-time <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="chandropdown">
+              <li><a href="#" onclick="return setOneshot()">One-shot</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" id="oneshot">
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1 text-right vcenter">Mode: </div>
+        <div class="col-lg-2 col-md-2 col-sm-2 col-xs-2">
+          <div class="btn-group">
+            <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              One-shot <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" id="chandropdown">
+              <li><a href="#" onclick="return setRealtime()">Real-time</a></li>
+            </ul>
+          </div>
+        </div>
+        <div class="col-lg-1 col-md-1 col-sm-1 col-xs-1">
+          <button type="button" onclick="return oneShotGo()" id="gobutton" class="btn btn-danger">Go!</button>
+        </div>
+      </div>
+
+      <hr/>
+      <div id="gpiolist"/>
     </div>
   </div>
 
-  <script type="text/javascript" src="/static/js/analyzer.js"></script>
   <script type="text/javascript">
   //<![CDATA[
     start_analyzer();

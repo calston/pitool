@@ -75,11 +75,17 @@ class GPIO(Pin):
         self.pin = None
         self.listening = False
 
+        # Default pull
+        self.pull = gpio.PUD_DOWN
+
         self.mode = self.getFunction()
 
         # Check initial state
         if self.mode in (0, 1):
-            gpio.setup(bcm_id, self.mode)
+            pud = None
+            if self.mode == 1:
+                pud = self.pull
+            gpio.setup(bcm_id, self.mode, pull_up_down=pud)
             self.state = gpio.input(bcm_id)
         else:
             self.state = -1
@@ -93,11 +99,29 @@ class GPIO(Pin):
         # Return time to micro-second resolution
         return time.time()*1000000
 
+
+    def edgeReceived(self, bit):
+        pass
+
     def _edge(self, chan):
         bit = gpio.input(self.bcm_id)
         now = self._now()
         self._buffer_write(bit, now)
         self.state = bit
+        self.edgeReceived(bit)
+
+    def pullUp(self):
+        self.pull = gpio.PUD_UP
+        if self.mode == gpio.IN:
+            gpio.setup(self.bcm_id, self.mode, pull_up_down=self.pull)
+
+    def pullDown(self):
+        self.pull = gpio.PUD_DOWN
+        if self.mode == gpio.IN:
+            gpio.setup(self.bcm_id, self.mode, pull_up_down=self.pull)
+
+    def flushBuffer(self):
+        self.buffer = []
 
     def listen(self):
         """Start listening to events on this pin. Updates `self.buffer`"""
@@ -130,7 +154,7 @@ class GPIO(Pin):
 
     def setInput(self):
         """Set channel to input mode"""
-        gpio.setup(self.bcm_id, gpio.IN)
+        gpio.setup(self.bcm_id, gpio.IN, pull_up_down=self.pull)
         self.mode = gpio.IN
 
     def setOutput(self):
