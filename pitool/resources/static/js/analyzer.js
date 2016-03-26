@@ -8,11 +8,11 @@ function createGpioSlot(gpio) {
   var bcid = gpio.bcm_id;
   var doc="<div class=\"analyzer row\" id=\"gp"+bcid+"\">";
 
-  doc += "<div class=\"col-lg-1 gpio-cell\">";
-  doc += "<strong>GPIO "+bcid+"</strong>";
+  doc += "<div class=\"col-lg-1 col-md-1 col-sm-1 col-xs-1 gpio-cell\">";
+  doc += "<strong>GPIO"+bcid+"</strong>";
   doc += "</div>";
 
-  doc += "<div class=\"col-lg-11 gpio-cell\">";
+  doc += "<div class=\"col-lg-11 col-md-11 col-sm-11 col-xs-11 gpio-cell\">";
   doc += '<span class="gpio-chart" id="spark'+bcid+'"></span>';
   doc += "</div>";
 

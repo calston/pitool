@@ -13,9 +13,7 @@ function setState(event, state) {
 
 function setMode(mode, id) {
   $.getJSON( "/api/gpio/mode/"+id+"/"+mode, function( data ) {
-    console.log(data);
     var gpio = $("#gp"+id);
-    console.log(gpio);
     gpio.html(gpioRow(data));
     $("input[type=\"checkbox\"]").bootstrapSwitch();
     $("input[type=\"checkbox\"]").on('switchChange.bootstrapSwitch', setState);
@@ -84,7 +82,6 @@ function get_header() {
     var gpiolist = $("#gpiolist");
 
     $.each( data["pins"], function(i, val) {
-      console.log(val);
       var doc="<div class=\"row gpio\" id=\"gp"+val["bcm_id"]+"\">";
       doc += gpioRow(val);
       doc += "</div>";
