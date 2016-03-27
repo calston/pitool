@@ -20,6 +20,7 @@ setup(
         'Twisted',
         'PyYaml',
         'RPi.GPIO',
+        'Autobahn',
     ],
     classifiers=[
         'Development Status :: 4 - Beta',

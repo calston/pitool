@@ -217,6 +217,7 @@ class PiToolService(service.Service):
 
         factory = WSFactory(u"ws://127.0.0.1:8082", self.board)
         factory.protocol = DataProtocol
+        factory.setProtocolOptions(allowHixie76 = True)
 
         reactor.listenTCP(8082, factory)
 
